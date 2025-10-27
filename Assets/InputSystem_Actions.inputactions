@@ -1013,6 +1013,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "Reset",
+                    "type": "Button",
+                    "id": "46410a68-ff15-42fb-8061-8cac467ad18a",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -1030,6 +1039,17 @@
                 {
                     "name": "negative",
                     "id": "b8f3d613-9ea8-4743-b923-c09676e3c5a6",
+                    "path": "<Gamepad>/leftStick/left",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Move",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "negative",
+                    "id": "ac3f9cc0-e270-4807-b40d-e14308b75cc2",
                     "path": "<Keyboard>/a",
                     "interactions": "",
                     "processors": "",
@@ -1041,6 +1061,17 @@
                 {
                     "name": "positive",
                     "id": "f7fec8d7-09a4-4b92-b2d4-9c801c200241",
+                    "path": "<Gamepad>/leftStick/right",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Move",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "positive",
+                    "id": "b9675540-ea6b-40ed-9573-65f64051c3ba",
                     "path": "<Keyboard>/d",
                     "interactions": "",
                     "processors": "",
@@ -1052,11 +1083,44 @@
                 {
                     "name": "",
                     "id": "0b5b2639-8a0e-4f25-adef-c046d206f3ec",
+                    "path": "<Gamepad>/buttonSouth",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Jump",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "c2887c6e-5b0b-402f-83be-ce8de042edb6",
                     "path": "<Keyboard>/space",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
                     "action": "Jump",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "4db292e7-dcce-4c8d-b1a6-d6843df53943",
+                    "path": "<Gamepad>/buttonNorth",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Reset",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "020c1bb3-dca4-406f-86cb-cea87f9707e7",
+                    "path": "<Keyboard>/r",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Reset",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
