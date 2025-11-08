@@ -6,8 +6,14 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Week8Playtest/Scenes/Week8Playtest.unity
-    guid: 99c9720ab356a0642a771bea13969a05
+    path: Assets/Week8Playtest/Scenes/Week8A.unity
+    guid: 1be79aa2c4a6446479884e7094e28b87
+  - enabled: 1
+    path: Assets/Week8Playtest/Scenes/Week8B.unity
+    guid: be5979e9bde114c5eb28e7169e90cd55
+  - enabled: 1
+    path: Assets/Week8Playtest/Scenes/Week8C.unity
+    guid: 03819da013acf456ab9e462587eeece3
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   m_UseUCBPForAssetBundles: 0

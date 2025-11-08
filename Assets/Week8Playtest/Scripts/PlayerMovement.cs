@@ -2,6 +2,7 @@ using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
+using UnityEngine.SceneManagement;
 
 [RequireComponent(typeof(Rigidbody), typeof(BoxCollider))]
 public class PlayerMovement : MonoBehaviour
@@ -10,6 +11,8 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private InputActionReference moveAction;
     [SerializeField] private InputActionReference jumpAction;
     [SerializeField] private InputActionReference resetAction;
+    [SerializeField] private InputActionReference changeScene;
+
 
     [Header("Movement")]
     public float moveSpeed = 100f;
@@ -52,34 +55,55 @@ public class PlayerMovement : MonoBehaviour
         moveAction?.action.Enable();
         jumpAction?.action.Enable();
         resetAction?.action.Enable();
+        changeScene?.action.Enable();
     }
     void OnDisable()
     {
         moveAction?.action.Disable();
         jumpAction?.action.Disable();
         resetAction?.action.Disable();
+        changeScene?.action.Disable();
     }
 
     void Update()
     {
         if (jumpAction != null && jumpAction.action.WasPressedThisFrame())
             jumpQueued = true;
-        
+
         if (resetAction != null && resetAction.action.WasPressedThisFrame())
         {
             UnityEngine.SceneManagement.SceneManager.LoadScene(
                 UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex);
         }
+        
+        if (changeScene.action.WasPressedThisFrame())
+        {
+            int curr = SceneManager.GetActiveScene().buildIndex;
+            print(curr);
+            if (curr == 0)
+            {
+                SceneManager.LoadScene("Week8B");
+                return;
+            } else if (curr == 1)
+            {
+                SceneManager.LoadScene("Week8C");
+                return;
+            } else if (curr == 2)
+            {
+                SceneManager.LoadScene("Week8A");
+                return;
+            }
+        }
     }
 
 void FixedUpdate()
 {
-    // Lock to Z
+    // Lock to Z-slice (Z = 0)
     var p = rb.position;
     if (Mathf.Abs(p.z - sliceZ) > 0.0001f)
         rb.position = new Vector3(p.x, p.y, sliceZ);
 
-    // Horizontal move
+    // Horizontal movement
     float inputX = moveAction ? moveAction.action.ReadValue<float>() : 0f;
     float targetX = inputX * moveSpeed;
     float rate = (Mathf.Abs(inputX) > 0.01f) ? acceleration : deceleration;
