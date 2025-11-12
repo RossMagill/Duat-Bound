@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 using System.Collections.Generic;
+using System;
 
 [RequireComponent(typeof(BoxCollider))]
 public class StackController : MonoBehaviour, IControllable
@@ -12,7 +13,6 @@ public class StackController : MonoBehaviour, IControllable
 
     private BoxCollider box;
     private PlayerMovement playerMovement;
-    private GameObject activeRobotObject = null;
     private PlayerFocusManager playerFocusManager;
 
     private void Awake()
@@ -30,15 +30,37 @@ public class StackController : MonoBehaviour, IControllable
 
     public void RejoinStack(GameObject robot)
     {
-        stack.Add(activeRobotObject);
-        activeRobotObject.transform.SetParent(this.transform);
+        RobotController robotController = robot.GetComponent<RobotController>();
+        string robotType = robotController.robotType;
+        Debug.Log($"Robot of type **{robotType}** is rejoining the stack.");
+        Rigidbody rb = GetRobotRigidbody(robot);
+        float previousStackHeight = GetStackHeight();
+        float offset = stack[0].transform.localScale.y / 2f;
+
+        rb.isKinematic = true;
+        rb.useGravity = false;
+        BoxCollider boxCollider = robot.GetComponent<BoxCollider>();
+        boxCollider.enabled = false;
+        stack.Add(robot);
+        robot.transform.SetParent(this.transform);
+        playerFocusManager.DeregisterControllable(robot, this.gameObject);
+
+        // Logic for positioning the robot in the stack
+        if (robotType == "Flyer" || robotType == "Jumper")
+        {
+            robot.transform.localPosition = new Vector3(0, previousStackHeight + offset, 0);
+        }
+        else
+        {
+            robot.transform.localPosition = new Vector3(0, previousStackHeight, 0);
+        }
         Debug.Log($"Robot **{robot}** rejoined the stack. Current stack count: {stack.Count}");
         CalculateCollider();
     }
 
     public void HandleStackInputLogic()
     {
-        // if blah blah
+        // Try to stack
 
         PopStack();
     }
@@ -59,7 +81,6 @@ public class StackController : MonoBehaviour, IControllable
             playerMovement.enabled = false;
             poppedPlayerMovement.enabled = true;
             stack.RemoveAt(stack.Count - 1);
-            // Debug.Log($"Robot **{poppedRobot}** popped off the stack.");
             CalculateCollider();
         }
     }
@@ -76,15 +97,20 @@ public class StackController : MonoBehaviour, IControllable
 
     private void CalculateCollider()
     {
-        float height = 0;
-        foreach (GameObject robot in stack)
-        {
-            height += (float)robot.transform.localScale.y;
-            // Debug.Log($"Adding {robot.transform.localScale.y} to collider height from robot {robot.name}");
-        }
+        float height = GetStackHeight();
         float offset = stack[0].transform.localScale.y / 2f;
         box.center = new Vector3(0f, (height / 2f) - offset, 0);
         box.size = new Vector3(2f, height, 0.2f);
+    }
+
+    private float GetStackHeight()
+    {
+            float height = 0;
+            foreach (GameObject robot in stack)
+            {
+                height += (float)robot.transform.localScale.y;
+            }
+            return height;
     }
 
     void IControllable.ActivateControl()

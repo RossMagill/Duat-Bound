@@ -42,7 +42,6 @@ public class PlayerFocusManager : MonoBehaviour
     {
         if (!controllables.Contains(newTarget))
         {
-            currentFocusIndex = controllables.Count;
             controllables.Add(newTarget);
             // if (currentFocus == null)
             // {
@@ -62,8 +61,8 @@ public class PlayerFocusManager : MonoBehaviour
 
         controllables.Remove(target);
 
-        //SetFocus(newFocus);
-        //currentFocusIndex = controllables.IndexOf(newFocus);
+        Debug.Log($"new focus index: {controllables.IndexOf(newFocus)}");
+        SetFocus(newFocus);
     }
 
     public void SetFocus(GameObject newFocus)
@@ -75,6 +74,7 @@ public class PlayerFocusManager : MonoBehaviour
         }
 
         currentFocus = newFocus;
+        currentFocusIndex = controllables.IndexOf(newFocus);
 
         if (currentFocus != null)
         {
@@ -95,7 +95,13 @@ public class PlayerFocusManager : MonoBehaviour
 
         if (robotController != null && !currentFocus.GetComponent<StackController>())
         {
+            GameObject previousFocus = currentFocus;
             robotController.TryRejoin();
+
+            if (previousFocus != currentFocus)
+            {
+                return;
+            }
         }
 
         StackController stackController = currentFocus.GetComponent<StackController>();
@@ -115,6 +121,7 @@ public class PlayerFocusManager : MonoBehaviour
 
         if (switchFocusAction != null && switchFocusAction.action.WasPressedThisFrame())
         {
+            if (controllables.Count <= 1) return;
             currentFocusIndex = (currentFocusIndex + 1) % controllables.Count;
             if (controllables[currentFocusIndex] != null)
             {
@@ -122,6 +129,6 @@ public class PlayerFocusManager : MonoBehaviour
             }
         }
         
-        Debug.Log($"Current Focus: {currentFocus}, Index: {currentFocusIndex}");
+        // Debug.Log($"Current Focus: {currentFocus}, Index: {currentFocusIndex}");
     }
 }
