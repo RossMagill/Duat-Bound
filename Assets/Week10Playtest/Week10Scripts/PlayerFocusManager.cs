@@ -42,35 +42,44 @@ public class PlayerFocusManager : MonoBehaviour
     {
         if (!controllables.Contains(newTarget))
         {
+            currentFocusIndex = controllables.Count;
             controllables.Add(newTarget);
-            if (currentFocus == null)
-            {
-                SetFocus(newTarget);
-            }
+            // if (currentFocus == null)
+            // {
+            //     SetFocus(newTarget);
+            // }
+
+            SetFocus(newTarget);
         }
     }
 
-    // public void DeregisterControllable(GameObject target)
-    // {
-    //     if (controllables.Contains(target))
-    //     {
-    //         controllables.Remove(target);
-    //         if (currentFocus == target)
-    //         {
-    //             currentFocus = controllables.Count > 0 ? controllables[0] : null;
-    //         }
-    //     }
-    // }
+    public void DeregisterControllable(GameObject target, GameObject newFocus)
+    {
+        if (!controllables.Contains(target))
+        {
+            return;
+        }
+
+        controllables.Remove(target);
+
+        //SetFocus(newFocus);
+        //currentFocusIndex = controllables.IndexOf(newFocus);
+    }
 
     public void SetFocus(GameObject newFocus)
     {
-        if (controllables.Contains(newFocus))
+        if (currentFocus != null)
         {
-            currentFocus = newFocus;
+            IControllable previousControllable = currentFocus.GetComponent<IControllable>();
+            previousControllable?.DeactivateControl();
         }
-        else
+
+        currentFocus = newFocus;
+
+        if (currentFocus != null)
         {
-            Debug.LogWarning("Attempted to set focus to an unregistered controllable.");
+            IControllable newControllable = currentFocus.GetComponent<IControllable>();
+            newControllable?.ActivateControl();
         }
     }   
 
@@ -97,11 +106,6 @@ public class PlayerFocusManager : MonoBehaviour
         }
     }
 
-    void SwitchFocus()
-    {
-        // TODO
-    }
-
     void Update()
     {
         if (stackInteractionAction != null && stackInteractionAction.action.WasPressedThisFrame())
@@ -111,7 +115,13 @@ public class PlayerFocusManager : MonoBehaviour
 
         if (switchFocusAction != null && switchFocusAction.action.WasPressedThisFrame())
         {
-            SwitchFocus();
+            currentFocusIndex = (currentFocusIndex + 1) % controllables.Count;
+            if (controllables[currentFocusIndex] != null)
+            {
+                SetFocus(controllables[currentFocusIndex]);
+            }
         }
+        
+        Debug.Log($"Current Focus: {currentFocus}, Index: {currentFocusIndex}");
     }
 }

@@ -3,7 +3,7 @@ using UnityEngine.InputSystem;
 using System.Collections.Generic;
 
 [RequireComponent(typeof(BoxCollider))]
-public class StackController : MonoBehaviour
+public class StackController : MonoBehaviour, IControllable
 {
     // public static StackController Instance { get; private set; }
 
@@ -13,11 +13,13 @@ public class StackController : MonoBehaviour
     private BoxCollider box;
     private PlayerMovement playerMovement;
     private GameObject activeRobotObject = null;
+    private PlayerFocusManager playerFocusManager;
 
     private void Awake()
     {
         box = GetComponent<BoxCollider>();
         playerMovement = GetComponent<PlayerMovement>();
+        playerFocusManager = FindAnyObjectByType<PlayerFocusManager>();
     }
 
     void Start()
@@ -46,6 +48,7 @@ public class StackController : MonoBehaviour
         if (stack.Count > 1)
         {
             GameObject poppedRobot = stack[^1];
+            playerFocusManager.RegisterControllable(poppedRobot);
             PlayerMovement poppedPlayerMovement = poppedRobot.GetComponent<PlayerMovement>();
             BoxCollider poppedBox = poppedRobot.GetComponent<BoxCollider>();
             poppedRobot.transform.SetParent(null);
@@ -53,11 +56,10 @@ public class StackController : MonoBehaviour
             Rigidbody rb = GetRobotRigidbody(poppedRobot);
             rb.isKinematic = false;
             rb.useGravity = true;
-            // popAction?.action.Disable();
             playerMovement.enabled = false;
             poppedPlayerMovement.enabled = true;
             stack.RemoveAt(stack.Count - 1);
-            Debug.Log($"Robot **{poppedRobot}** popped off the stack.");
+            // Debug.Log($"Robot **{poppedRobot}** popped off the stack.");
             CalculateCollider();
         }
     }
@@ -78,10 +80,22 @@ public class StackController : MonoBehaviour
         foreach (GameObject robot in stack)
         {
             height += (float)robot.transform.localScale.y;
-            Debug.Log($"Adding {robot.transform.localScale.y} to collider height from robot {robot.name}");
+            // Debug.Log($"Adding {robot.transform.localScale.y} to collider height from robot {robot.name}");
         }
         float offset = stack[0].transform.localScale.y / 2f;
         box.center = new Vector3(0f, (height / 2f) - offset, 0);
         box.size = new Vector3(2f, height, 0.2f);
+    }
+
+    void IControllable.ActivateControl()
+    {
+        playerMovement.enabled = true;
+        Debug.Log("StackController ActivateControl called.");
+    }
+
+    void IControllable.DeactivateControl()
+    {
+        playerMovement.enabled = false;
+        Debug.Log("StackController DeactivateControl called.");
     }
 }

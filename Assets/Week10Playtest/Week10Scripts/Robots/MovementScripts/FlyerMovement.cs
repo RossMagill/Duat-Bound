@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(Rigidbody), typeof(Collider))]
-public class FlyerMovement : MonoBehaviour, IControllable
+public class FlyerMovement : MonoBehaviour
 {
     [Header("Input")]
     [SerializeField] private InputActionReference moveAction;
