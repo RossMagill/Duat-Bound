@@ -1209,9 +1209,18 @@
                     "initialStateCheck": false
                 },
                 {
+                    "name": "SwitchFocus",
+                    "type": "Button",
+                    "id": "a5707f93-9180-4ebd-81f4-231a5b402c33",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
                     "name": "StackInteraction",
                     "type": "Button",
-                    "id": "f4e05c38-c127-455c-9cf7-9cf9cd951ac6",
+                    "id": "86a1d365-a442-4c68-9370-94c7c7eeaaef",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
@@ -1238,17 +1247,6 @@
                     "processors": "",
                     "groups": "",
                     "action": "Ability",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "a63be364-8883-459d-bf28-4e07c1cd6abf",
-                    "path": "<Keyboard>/t",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "StackInteraction",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -1306,6 +1304,28 @@
                     "action": "Move",
                     "isComposite": false,
                     "isPartOfComposite": true
+                },
+                {
+                    "name": "",
+                    "id": "ebf7cfce-3de4-44cf-9cf5-ad287c750a2b",
+                    "path": "<Keyboard>/tab",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "SwitchFocus",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "3a1c7d2e-fe59-4160-bcb2-ca469ffd266c",
+                    "path": "<Keyboard>/t",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "StackInteraction",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         }
