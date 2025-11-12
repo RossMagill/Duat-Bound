@@ -17,7 +17,7 @@ public class RobotController : MonoBehaviour, IControllable
 
     public void TryRejoin()
     {
-        float searchDistance = 2f;
+        float searchDistance = 1f;
         float halfWidth = transform.localScale.x / 2f;
         Vector3 centreOrigin = transform.position;
         Vector3 rightOrigin = transform.position + transform.right * halfWidth;
@@ -57,6 +57,7 @@ public class RobotController : MonoBehaviour, IControllable
         if (foundTarget)
         {
             StackController targetStack = finalHit.collider.GetComponentInParent<StackController>();
+            Debug.Log($"Found stack to rejoin: {targetStack?.gameObject.name}");
             if (targetStack != null)
             {   
                 targetStack.RejoinStack(this.gameObject);
