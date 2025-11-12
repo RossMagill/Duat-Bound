@@ -12,13 +12,13 @@ public class StackController : MonoBehaviour, IControllable
     private List<GameObject> stack = new();
 
     private BoxCollider box;
-    private PlayerMovement playerMovement;
+    private IMovement playerMovement;
     private PlayerFocusManager playerFocusManager;
 
     private void Awake()
     {
         box = GetComponent<BoxCollider>();
-        playerMovement = GetComponent<PlayerMovement>();
+        playerMovement = GetComponent<IMovement>();
         playerFocusManager = FindAnyObjectByType<PlayerFocusManager>();
     }
 
@@ -71,15 +71,15 @@ public class StackController : MonoBehaviour, IControllable
         {
             GameObject poppedRobot = stack[^1];
             playerFocusManager.RegisterControllable(poppedRobot);
-            PlayerMovement poppedPlayerMovement = poppedRobot.GetComponent<PlayerMovement>();
+            IMovement poppedMovement = poppedRobot.GetComponent<IMovement>();
             BoxCollider poppedBox = poppedRobot.GetComponent<BoxCollider>();
             poppedRobot.transform.SetParent(null);
             poppedBox.enabled = true;
             Rigidbody rb = GetRobotRigidbody(poppedRobot);
             rb.isKinematic = false;
             rb.useGravity = true;
-            playerMovement.enabled = false;
-            poppedPlayerMovement.enabled = true;
+            playerMovement.DisableMovement();
+            poppedMovement?.EnableMovement();
             stack.RemoveAt(stack.Count - 1);
             CalculateCollider();
         }
@@ -115,13 +115,13 @@ public class StackController : MonoBehaviour, IControllable
 
     void IControllable.ActivateControl()
     {
-        playerMovement.enabled = true;
+        playerMovement.EnableMovement();
         Debug.Log("StackController ActivateControl called.");
     }
 
     void IControllable.DeactivateControl()
     {
-        playerMovement.enabled = false;
+        playerMovement.DisableMovement();
         Debug.Log("StackController DeactivateControl called.");
     }
 }

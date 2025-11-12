@@ -6,12 +6,12 @@ public class RobotController : MonoBehaviour, IControllable
     [Header("Robot Type")]
     public string robotType;
 
-    private PlayerMovement playerMovement;
+    private IMovement playerMovement;
     private PlayerFocusManager playerFocusManager;
 
     private void Awake()
     {
-        playerMovement = GetComponent<PlayerMovement>();
+        playerMovement = GetComponent<IMovement>();
         playerFocusManager = FindAnyObjectByType<PlayerFocusManager>();
     }
 
@@ -68,13 +68,13 @@ public class RobotController : MonoBehaviour, IControllable
     void IControllable.ActivateControl()
     {
         //this.enabled = true;
-        playerMovement.enabled = true;
+        playerMovement.EnableMovement();
         Debug.Log($"Robot of type **{robotType}** control activated.");
     }
 
     void IControllable.DeactivateControl()
     {
-        playerMovement.enabled = false;
+        playerMovement.DisableMovement();
         //this.enabled = false;
     }
 }
